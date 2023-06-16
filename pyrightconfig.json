@@ -1,0 +1,10 @@
+{
+    "venv": ".venv",
+    "reportMissingImports": true,
+    "reportMissingTypeStubs": true,
+    "executionEnvironment": [
+        {
+            "root": "."
+        }
+    ]
+}

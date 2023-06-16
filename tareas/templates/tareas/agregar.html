@@ -1,0 +1,13 @@
+{% extends 'tareas/plantilla.html' %}
+
+{% block titulo %}Agregar tarea{% endblock %}
+
+{% block contenido %}
+<h1>Agregar tarea</h1>
+<a href="{% url 'tareas:tareas' %}">Ver tareas</a>
+<form action="{% url 'tareas:agregar' %}" method="post">
+    {% csrf_token %}
+    {{ formulario.as_p }}
+    <input type="submit" value="Agregar">
+</form>
+{% endblock %}
