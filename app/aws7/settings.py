@@ -68,9 +68,9 @@ WSGI_APPLICATION = 'aws7.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME', 'aws7'),
-        'USER': os.environ.get('DB_USER', 'aws7'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'aws7password'),
+        'NAME': os.environ.get('MYSQL_DATABASE', 'aws7'),
+        'USER': os.environ.get('MYSQL_USER', 'aws7'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD', 'aws7password'),
         'PORT': os.environ.get('DB_PORT', '3306'),
         'HOST': os.environ.get('DB_HOST', 'db'),
     }
