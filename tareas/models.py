@@ -10,4 +10,4 @@ class Tarea(models.Model):
         return f'{self.texto}'
 
     class Meta:
-        ordering = ['-prioridad', 'texto']
+        ordering = ['prioridad', 'texto']

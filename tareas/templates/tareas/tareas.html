@@ -3,11 +3,35 @@
 {% block titulo %}Lista de tareas{% endblock %}
 
 {% block contenido %}
+
 <h1>Lista de tareas</h1>
 <a href="{% url 'tareas:agregar' %}">Agregar tarea</a>
-<ul>
-    {% for tarea in tareas %}
-    <li>{{ tarea }}</li>
-    {% endfor %}
-</ul>
+
+{% if tareas %}
+<table border="1" style="border-collapse: collapse">
+    <thead>
+        <tr>
+            <th>Prioridad</th>
+            <th>Texto</th>
+            <th>Actualizar</th>
+            <th>Eliminar</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tarea in tareas %}
+        <tr>
+            <td>{{ tarea.prioridad }}</td>
+            <td>{{ tarea.texto }}</td>
+            <td>
+                <a href="{% url 'tareas:actualizar' tarea.id %}">A</a>
+            </td>
+            <td>
+                <a href="{% url 'tareas:eliminar' tarea.id %}">E</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
 {% endblock %}

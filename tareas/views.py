@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -20,9 +21,39 @@ def agregar(request: HttpRequest):
             return redirect(reverse('tareas:tareas'))
         else:
             return render(request, 'tareas/agregar.html', {
-                'formulario': formulario
+                'formulario': formulario,
+                'accion': 'Agregar'
             })
-
     return render(request, 'tareas/agregar.html', {
-        'formulario': TareaFormulario()
+        'formulario': TareaFormulario(),
+        'accion': 'Agregar'
     })
+
+def actualizar(request: HttpRequest, id):
+    try:
+        tarea = Tarea.objects.get(pk=id)
+        formulario = TareaFormulario(instance=tarea)
+    except ObjectDoesNotExist:
+        return redirect(reverse('tareas:tareas'))
+    if request.method == 'POST':
+        formulario = TareaFormulario(request.POST, instance=tarea)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect(reverse('tareas:tareas'))
+        else:
+            return render(request, 'tareas/agregar.html', {
+                'formulario': formulario,
+                'accion': 'Actualizar'
+            })
+    return render(request, 'tareas/agregar.html', {
+        'formulario': formulario,
+        'accion': 'Actualizar'
+    })
+
+def eliminar(_, id):
+    try:
+        tarea = Tarea.objects.get(pk=id)
+    except ObjectDoesNotExist:
+        return redirect(reverse('tareas:tareas'))
+    tarea.delete()
+    return redirect(reverse('tareas:tareas'))
