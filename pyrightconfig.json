@@ -1,4 +1,5 @@
 {
+    "venvPath": ".",
     "venv": ".venv",
     "reportMissingImports": true,
     "reportMissingTypeStubs": true,
