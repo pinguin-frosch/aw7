@@ -7,6 +7,10 @@ from tareas.forms import TareaFormulario
 from tareas.models import Tarea
 
 
+def index(request: HttpRequest):
+    return render(request, 'index.html')
+
+
 def tareas(request: HttpRequest):
     tareas = Tarea.objects.all()
     return render(request, 'tareas/tareas.html', {

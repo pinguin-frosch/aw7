@@ -1,0 +1,104 @@
+{% extends 'plantilla.html' %}
+
+{% block titulo %}Mini Blog{% endblock %}
+
+{% block contenido %}
+<h1>Mini Blog</h1>
+<p>
+    Se supone que aquí debería haber una aplicación web para gestionar los productos de un supermercado y otras
+    tareas. Sin embargo eso era un caso ficticio, además que no es lo importante de esta evaluación, sino que se
+    note que somos capaces de implementar alguna aplicación web en la nube usando una variedad de servicios de aws.
+    Es por ello que decidí escribir este mini blog detallando cómo fue el proceso que seguí para subir una
+    aplicación a aws. También hice mini aplicación para gestionar tareas, para poder comprobar la conexión con una
+    base de datos.
+</p>
+<p>
+    Lo primero que tuve que hacer para poder subir una aplicación web a aws, fue crear una aplicación web. Como la
+    parte de la programación no es lo importante de esta evaluación me ahorraré los detalles. Pero si alguien quiere
+    revisar, aquí está todo el código de la aplicación <a href="https://github.com/pinguin-frosch/aws7">aws7</a>.
+</p>
+<p>
+    Necesito principalmente 3 servicios de aws, ec2, rds y vpc. Voy a empezar con la vpc. Tengo que crear una vpc
+    con 4 subredes, dos públicas y dos privadas. Tienen que ser 2 de cada una porque esos requisitos pide rds con
+    mysql, quizás otros motores de base de datos no sean tan exigentes. Usaré la dirección de base que ofrece amazon
+    para la vpc, es decir, 10.10.10.0/16. Para las 4 subredes también voy a usar las redes por defecto, no hace
+    falta cambiar nada de eso en el proyecto que yo realice.
+</p>
+<p>
+    A continuación lo que hice fue crear la base de datos con rds. No es nada complicado de hacer. La mayoría de las
+    configuraciones las dejé por defecto. Traté de usar las opciones más básicas, ya que no necesito más, además así
+    me ahorro problemas de tener que calcular los costos y saber si me va a alcanzar para el ejercicio. Me aseguré
+    de que la base de datos quedara en una de las subredes privadas.
+</p>
+<p>
+    Tarda un momento en crearse la base de datos, y ahora hay otro problema. Como está en una subred privada, la
+    única forma de conectarse a la base de datos es a través de un computador que sea parte de la vpc. Y no tengo
+    ninguno, así que de momento no puedo hacer ninguna configuración en la base de datos, porque me falta crear la
+    base de datos para la aplicación web y un usuario no privilegiado para manejar esa base de datos.
+</p>
+<p>
+    Ahora me dirigí a ec2 y creé un nuevo servidor. Usé amazon linux, ya que es una de las opciones de la capa
+    gratuita de amazon para ec2. Usé el par de claves vockey, ya que las instancias de ec2 lo tienen por defecto y
+    así me puedo conectar después desde mi computador, solo tengo que descargar el archivo de credencial desde aws
+    academy. Sino tendría que generar claves pares con mi computador y el servidor y copiar la clave pública de mi
+    computador al servidor antes de poder conectarme.
+</p>
+<p>
+    También agregué el servidor a la parte pública de la vpc y configuré un grupo de seguridad que permite
+    conexiones de tipo ssh y http. En cuanto al espacio usé los 30gb máximos que permite aws en la capa gratuita.
+</p>
+<p>
+    Luego descargué la credencial para poder conectarme al servidor y administrarlo. Me conecté mediante ssh. Es
+    necesario cambiarle los permisos al archivo porque por defecto son muy permisivos y ssh los rechaza, así que
+    tuve que usar 400 para que funcione.
+</p>
+<p>
+    Una vez en el servidor, lo primero que tuve que hacer fue instalar los programas necesarios. Como hice la
+    aplicación con Docker no necesito casi nada, solo tuve que instalar docker, docker compose y git en el servidor.
+    Como estaba usando amazon linux usé estos comandos para hacerlo:
+</p>
+<ul class="text-break">
+    <li>sudo yum install -y docker git</li>
+    <li>sudo usermod -aG docker $USER</li>
+    <li>sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname
+        -s)-$(uname-m) -o /usr/local/bin/docker-compose</li>
+    <li>sudo chmod +x /usr/local/bin/docker-compose</li>
+</ul>
+<p>
+    Luego tuve que reiniciar el servidor para aplicar los permisos de grupos de linux, ya que sino el usuario
+    ec2-user no puede usar docker para construir las imágenes y contenedores.
+</p>
+<p>
+    Una vez todo eso terminado, solo tuve que clonar el código de la aplicación desde github. Modificar el archivo
+    de configuración de la aplicación. Y luego construir las imágenes para correr los contenedores con esos datos.
+    Dentro de los contenedores que estoy usando hay uno de mysql, así que con esta aplicación voy a conectarme a la
+    base de datos que está en rds para configurar la base de datos.
+</p>
+<p>
+    Es importante mencionar que la base de datos usa una dirección ip que no podemos ver desde la interfaz de aws.
+    Al menos no la encontré yo. Pero si nos ofrece una dirección dns, y esa debemos usar, por eso es importante que
+    los computadores estén en la misma red, porque cada red tiene un servicio de dns que resuelve las entradas
+    locales.
+</p>
+<p>
+    Una vez dentro de la base de datos agregué el usuario y la base de datos que necesitaba para la aplicación web.
+    Eso se hace con los comandos apropiados de mysql. Son súper simples, solo usé estos:
+</p>
+<ul>
+    <li>create user 'aws7'@'%' identified by 'password';</li>
+    <li>grant all on aws7.* to 'aws7'@'%';</li>
+</ul>
+<p>
+    Cuando ya tenía eso, me aseguré de que pudiera conectarse a la base de datos con ese usuario. Y después usé las
+    mismas credenciales en la aplicación y la ejecuté. Pero no funcionó, al menos el servidor web funciona porque me
+    dió un error 500. Siempre se me olvida que en Django hay que realizar las migraciones para que la base de datos
+    tenga las tablas necesarias antes de funcionar. Así que entré al contenedor con docker exec -it e hice
+    justamente eso.
+</p>
+<p>
+    Ahora sí estaba funcionando, lo primero que hice fue agregar algunas tareas para comprobar la conexión
+    nuevamente ya desde la aplicación. Originalmente solo hice una aplicación de tareas para tener algo que guardar
+    en la base de datos. Pero después agregué esta especie de blog para que no quedara tan pobre. Si tengo tiempo
+    después quizás agregue usuarios para que cada persona pueda tener su propia lista de tareas.
+</p>
+{% endblock %}

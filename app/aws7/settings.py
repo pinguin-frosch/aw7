@@ -46,7 +46,9 @@ ROOT_URLCONF = 'aws7.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            'aws7/templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

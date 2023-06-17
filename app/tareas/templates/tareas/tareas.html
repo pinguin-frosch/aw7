@@ -1,4 +1,4 @@
-{% extends 'tareas/plantilla.html' %}
+{% extends 'plantilla.html' %}
 
 {% block titulo %}Lista de tareas{% endblock %}
 
@@ -8,7 +8,7 @@
 <a href="{% url 'tareas:agregar' %}">Agregar tarea</a>
 
 {% if tareas %}
-<table border="1" style="border-collapse: collapse">
+<table class="table table-bordered mt-3">
     <thead>
         <tr>
             <th>Prioridad</th>
@@ -23,10 +23,10 @@
             <td>{{ tarea.prioridad }}</td>
             <td>{{ tarea.texto }}</td>
             <td>
-                <a href="{% url 'tareas:actualizar' tarea.id %}">A</a>
+                <a href="{% url 'tareas:actualizar' tarea.id %}" class="btn btn-sm btn-success">⟳</a>
             </td>
             <td>
-                <a href="{% url 'tareas:eliminar' tarea.id %}">E</a>
+                <a href="{% url 'tareas:eliminar' tarea.id %}" class="btn btn-sm btn-danger">⌫</a>
             </td>
         </tr>
         {% endfor %}
