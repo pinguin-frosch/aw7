@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    restart: always
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+  db:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - mysql_data:/var/lib/mysql
+    env_file:
+      - .env
+
+  proxy:
+    build:
+      context: ./nginx
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - app
+
+volumes:
+  mysql_data:
