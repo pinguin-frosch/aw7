@@ -112,6 +112,10 @@
 <p>
     También decidí explorar algunas cosas más en aws y configuré amazon cloudwatch. Lo configure de modo que si por
     alguna razón la instancia ec2 del servidor no está disponible, la reinicie automáticamente. Así uno no tiene que
-    estar pendiente todo el tiempo del servidor, a menos que sean cosas críticas.
+    estar pendiente todo el tiempo del servidor, a menos que sean cosas críticas. Finalmente lo último que hice fue
+    configuras algunas reglas en las acl de la vpc. Bloquié todas las conexiones entrantes de tipo icmp, por lo que
+    ninguna instancia de la vpc va a responder a un ping. Para demostrar que las reglas funcionan a nivel vpc, agregué
+    una regla de seguridad a la instancia del servidor web que permite todo tráfico icmp y aún así no puedo enviar
+    ningún ping, pero si quito la regla de la acl funciona de inmediato.
 </p>
 {% endblock %}
