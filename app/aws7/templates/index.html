@@ -101,4 +101,17 @@
     en la base de datos. Pero después agregué esta especie de blog para que no quedara tan pobre. Si tengo tiempo
     después quizás agregue usuarios para que cada persona pueda tener su propia lista de tareas.
 </p>
+<hr>
+<p>
+    Después de unas horas decidí volver a visitar la página y me dí cuenta que ya no funcionaba la aplicación. Entré a
+    awsacademy y me puse a leer las instrucciones que aparecián al lado. En cuanto a ec2 dice que las instancias se van
+    a apagar cuando uno cierre la sesión, así que cuando uno las vuelva a enceder van a cambiar las direcciones ip.
+    Logré solucionar eso con una dirección ip elástica, pero sigue estando el problema de que el servidor se va a apagar
+    en máximo 4 horas. Pero no puedo hacer nada respecto a eso, ya que esas son condiciones del laboratorio.
+</p>
+<p>
+    También decidí explorar algunas cosas más en aws y configuré amazon cloudwatch. Lo configure de modo que si por
+    alguna razón la instancia ec2 del servidor no está disponible, la reinicie automáticamente. Así uno no tiene que
+    estar pendiente todo el tiempo del servidor, a menos que sean cosas críticas.
+</p>
 {% endblock %}
