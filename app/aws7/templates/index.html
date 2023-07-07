@@ -126,4 +126,29 @@
     de aws. Solo es válido durante unos 20 minutos, así que quien lo reciba debe abrir el enlace de inmediato, luego no
     hay que preocuparse porque la sesión permanecerá abierta.
 </p>
+<hr>
+<p>
+    Ahora como parte de la última evaluación tenemos que hacer otras cosas extra. Más que nada hay que agregar servicios
+    de modo que las instancias en ejecución se adapten al tráfico por parte de los usuarios. Para ello hay varias cosas
+    que se pueden hacer en aws. Necesitamos un grupo de destino, plantilla de ami, balanceadores de carga, grupos de auto
+    scaling, etc.
+</p>
+<p>
+    Lo primero que tengo que hacer es crear una imagen de ami a partir de la instancia actual en la que estoy ejecutando el
+    servidor. Así tengo una copia del servidor tal como está actualmente y eso lo puedo usar después para crear más copias
+    cuando lo necesite. Precisamente voy a usar la ami para crear una plantilla de lanzamiento. Es lo que me permite crear
+    instancias con una configuración predeterminada, además de usar la ami que yo quiera.
+</p>
+<p>
+    Una vez con todo eso configurado, es hora de crear un grupo de destino. Como aún no hemos configurado un balanceador de
+    carga solo tenemos que crearlo con la configuración por defecto, asegurándonos de que actualizamos las configuraciones
+    de red apropiadamente. Ahora creamos un balanceador de carga. Solo tenemos nuevamente que verificar la configuración de
+    red y asignar el grupo de destino, para que diriga las peticiones al grupo y luego a alguna instancia particular.
+</p>
+<p>
+    Finalmente hay que crear un grupo de auto scaling de ec2. Aquí son más pasos los que hay que realizar. Ya que hay que
+    conectarlo con el grupo de destino, configurar las redes. Los parámetros de autoescalado, etc. Pero siguiendo el wizard
+    paso a paso no debería haber ningún problema solo con leer. Y con eso ya tenemos las instancias ejecutándose al nivel
+    que necesiten los usuarios. El grupo de autoescalado se encargará de expandir o contraer según sea necesario.
+</p>
 {% endblock %}
