@@ -1,0 +1,13 @@
+{% extends 'plantilla.html' %}
+
+{% block titulo %}Mini Blog{% endblock %}
+
+{% block contenido %}
+<h1>Página para sobrecargar la CPU</h1>
+<p>Se recargará la página en algunos segundos</p>
+<script>
+    setTimeout(function () {
+        window.location.reload()
+    }, 1000)
+</script>
+{% endblock %}
