@@ -14,7 +14,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'aws7secretkey')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = not bool(os.environ.get('DEBUG', False))
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.elb.amazonaws.com']
 EXTRA_HOSTS = os.environ.get('EXTRA_HOSTS', '')
 if EXTRA_HOSTS:
     ALLOWED_HOSTS.extend(EXTRA_HOSTS.split(','))
